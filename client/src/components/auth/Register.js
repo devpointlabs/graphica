@@ -10,8 +10,6 @@ import styled from "styled-components";
 class Register extends React.Component {
   state = { email: '', password: '', passwordConfirmation: '', first_name: '', last_name: '', tagline: '', file: '' };
   
-  componentDidMount() { this.props.toggleCatbar(false) }
-
   onDrop = (files) => {
     const blob = new Blob([files[0]], { type: 'image/png' });
     const url = URL.createObjectURL(blob);

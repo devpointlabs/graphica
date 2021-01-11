@@ -3,10 +3,8 @@ import { AuthConsumer } from '../../providers/AuthProvider';
 import { ImageConsumer } from '../../providers/ImageProvider';
 import styled from "styled-components";
 
-
 const AddToExisting = (props) => {
-
-const [ collectionId, setCollectionId ] = useState()
+  const [ collectionId, setCollectionId ] = useState()
 
   useEffect(() => {
     props.fetchCollections(props.user.id) 
@@ -58,12 +56,9 @@ const SubmitButton = styled.button`
   padding: 10px 20px;
   width: 100%;
 `
-
-
 const StyledLabel = styled.div`
   font-family: 'Montserrat',  sans-serif !important;
 `
-
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -74,7 +69,6 @@ const FormSelect = styled.select`
   padding 5px;
   font-family: 'Montserrat',  sans-serif !important;
 `
-
 
 const ConnectedAddToExisting = (props) => (
   <AuthConsumer>

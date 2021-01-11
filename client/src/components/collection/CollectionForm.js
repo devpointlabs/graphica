@@ -69,16 +69,13 @@ const FormHeader = styled.div`
  display: flex;
  justify-content: flex-start;
 `
-
 const StyledLabel = styled.div`
   font-family: 'Montserrat',  sans-serif !important;
 `
-
 const StyledLine = styled.hr`
   background-color: #96969C;
   margin: 0;
 `
-
 const TitleInput = styled.input`
   font-size: 1rem;
   width: 100%;

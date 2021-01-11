@@ -1,18 +1,35 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import { FeedContext } from './FeedProvider';
 
-const ImageContext = React.createContext();
+export const ImageContext = React.createContext();
 
 export const ImageConsumer = ImageContext.Consumer;
 
+
 export const ImageProvider = (props) => {
-  const [imageId, setImageId] = useState();
-  const [user, setUser] = useState("");
-  const [userImage, setUserImage] = useState();
+  const [ imageId, setImageId] = useState();
+  const [ user, setUser] = useState("");
+  const [ userImage, setUserImage] = useState();
   const [ pictureJunctions, setPictureJunctions ] = useState(null);
   const [ userCollections, setUserCollections ] = useState([{title: 'there are none'}])
-
+  const [ direction, setDirection ] = useState(null);
+  const [ imageIds, setImageIds ] = useState([])
   
+  const feedContext = useContext(FeedContext)
+  //get all image ids for search from feedContext
+  
+  console.log(imageIds)
+  useEffect(() => {
+    axios.get(`/api/users`)
+    getImageIds()
+  }, [])
+
+  const getImageIds = () => {
+    console.log(feedContext.pictures)
+    setImageIds(feedContext.pictures.map(picture => picture.id))
+  }
+
   const fetchUser = (userId) => {
     return new Promise((resolve, reject) => {
       axios.get(`/api/users/${userId}`)
@@ -44,9 +61,15 @@ export const ImageProvider = (props) => {
       axios.get(`/api/pictures/${id}`)
       .then( res => {
         updateViews(res.data)
+        // checkFavorite(res.data)
         resolve(res)
       })
       .catch((err) => {
+        if (direction === "descending") {
+          setImageId(imageId-1)
+        } else if ( direction === "ascending") {
+          setImageId(imageId + 1)
+        } 
         console.log(err);
         reject(err);
       })
@@ -56,6 +79,7 @@ export const ImageProvider = (props) => {
   const updateViews = (image) => {
     axios.patch(`/api/pictures/${image.id}`, {views: image.views+1, url: image.url, title: image.title, description: image.description, user_id: image.user_id, category_id: image.category_id})
   }
+
   const fetchCategory = (catId) => {
     return new Promise((resolve, reject) => {
       axios.get(`/api/categories/${catId}`)
@@ -68,6 +92,7 @@ export const ImageProvider = (props) => {
       })
     })
   }
+
   const fetchJunction = (id) => {
       axios.get(`/api/pictures/${id}/collection_pictures`)
       .then( res => {
@@ -113,8 +138,22 @@ export const ImageProvider = (props) => {
     .catch(console.log)
   }
 
+  const addToFavorites = (userId) => {
+    axios.post(`/api/users/${userId}/favorites`, {picture_id: imageId, user_id: userId})
+      .then(res => console.log("new favorite", res.data))
+      .catch(console.log)
+  } //Removing from here..
+
+  const chevronDirection = (incomingDirection) => {
+    setDirection(incomingDirection)
+    if (incomingDirection === "ascending") {
+      setImageId(imageId + 1) //change these to setImageId(imageIds[imageIds.IndexOf(imageId) +1])
+    } else if (incomingDirection === "descending")
+      setImageId(imageId - 1)
+  }
   return(
     <ImageContext.Provider value={{
+      chevronDirection,
       fetchUser,
       user,
       userImage,
@@ -130,7 +169,7 @@ export const ImageProvider = (props) => {
       addImageToCollection,
       fetchCollections,
       userCollections,
-      
+      addToFavorites,
     }}> 
       { props.children }
     </ImageContext.Provider>     

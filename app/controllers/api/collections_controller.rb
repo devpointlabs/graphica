@@ -1,6 +1,7 @@
 class Api::CollectionsController < ApplicationController
   def index
-    render json: Collection.search(params[:search], params[:page])
+    # render json: Collection.search(params[:search], params[:page])
+    render json: Collection.search(params[:search], params[:limit], params[:offset])
   end
 
   def show

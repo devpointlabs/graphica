@@ -26,7 +26,6 @@ const NewCollection = (props) => {
   )
 }
 
-
 const CollectionButton = styled.button`
   display: flex;
   align-items: center;
@@ -40,7 +39,6 @@ const CollectionButton = styled.button`
   cursor: pointer;
   margin-left: 1.5rem;
 `
-
 const Icon = styled.img`
   height: 1.15rem;
   margin-left: 0.5rem;

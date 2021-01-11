@@ -11,6 +11,7 @@ class User < ActiveRecord::Base
   has_many :pictures, dependent: :destroy
   has_many :collections, dependent: :destroy
   has_many :picture_comments
+  has_many :favorites, dependent: :destroy
   #Should picture comments stay after user has been deleted? 
   #this will leave them up.
 

@@ -34,6 +34,7 @@ group :development, :test do
   gem 'faker'
   gem 'pry'
   gem 'dotenv-rails'
+  gem 'fastimage'
 end
 
 group :development do

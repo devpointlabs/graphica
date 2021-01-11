@@ -4,8 +4,8 @@ class Collection < ApplicationRecord
   has_many :pictures, through: :collection_pictures
   validates :title, presence: true
   
-  def self.search(search, page)
-    Collection.where('title ILIKE :q', q: "%#{search}%")
-    .page(page).per(18)
+  def self.search(search, limit=9, offset=0)    
+    collections = Collection.where('title ILIKE ?', "%#{search}%")
+    collections.limit(limit).offset(offset).order(created_at: :desc)
   end
 end

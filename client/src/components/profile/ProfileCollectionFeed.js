@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import ProfileCollection from './ProfileCollection';
-
+import CollectionPreviewCard from './CollectionPreviewCard';
 
 class ProfileCollectionFeed extends React.Component {
   state = { collections: [], user: null }
@@ -26,7 +25,7 @@ class ProfileCollectionFeed extends React.Component {
   }
 
   renderCollections = () => this.state.collections.map((collection) => (
-    <ProfileCollection key={collection.id} collection={collection} />
+    <CollectionPreviewCard key={collection.id} collection={collection} />
   ))
 
   render() {

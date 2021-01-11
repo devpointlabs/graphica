@@ -7,6 +7,9 @@ import styled from 'styled-components';
 import Modal from '../modal/Modal';
 import useModal from '../../hooks/useModal';
 
+//Convert title category & description to state hook
+//Consider dividing into two components
+
 const EditPicture = (props) => {
   const [ title, setTitle ] = useState(props.image.title)
   const [ description, setDescription ] = useState(props.image.description)
@@ -60,7 +63,7 @@ const EditPicture = (props) => {
     setCategoryId(event.target.value)
   }
 
-  const RenderEditPicture = () => (
+  const renderEditPicture = () => (
     <Wrapper>
       <Flex>
         <StyledButton onClick={toggle}>
@@ -129,7 +132,7 @@ const EditPicture = (props) => {
           { 
             props.user.id === (props.userId) &&
               <>
-                { RenderEditPicture() }
+                { renderEditPicture() }
               </>
           }
         </>

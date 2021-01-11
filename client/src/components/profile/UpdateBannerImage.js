@@ -2,9 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import styled from 'styled-components';
 
-
 class UpdateBannerImage extends React.Component {
-
   state = { formValues: { file: '' }, };
 
   onDrop = (files) => {
@@ -66,7 +64,6 @@ const SubmitButton = styled.button`
     color: white;
     cursor: pointer;
 `
-
 const DropBackground = styled.div`
   background-image: url(${props => props.url});
   background-size: cover;

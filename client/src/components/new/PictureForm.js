@@ -4,13 +4,11 @@ import Dropzone from "react-dropzone";
 import axios from "axios";
 import { AuthConsumer, } from "../../providers/AuthProvider";
 import { withRouter } from "react-router-dom";
-import AddCollectionToPicture from "./AddCollectionToPicture";
 import '../../Styles/Form.css'
 
 class PictureForm extends React.Component {
-
   state = { 
-    formValues: {  file: "", title: "", description: "",  categoryId: "", url: "" },
+    formValues: {  file: "", title: "", description: "",  categoryId: "", url: "", ratio: 1.01 },
     categories: [],
   };
   
@@ -32,10 +30,9 @@ class PictureForm extends React.Component {
         title: this.state.formValues.title,
         description: this.state.formValues.description,
         category_id: this.state.formValues.categoryId,
+        ratio: this.state.formValues.ratio,
       } 
     }
-
-    console.log(this.state.formValues);
 
     axios.post(`/api/users/${this.props.auth.user.id}/pictures`, data, options)
       .then(res => {
@@ -46,11 +43,18 @@ class PictureForm extends React.Component {
   }
   
   onDrop = (files) => {
+    const img = document.createElement('img');
     const blob = new Blob([files[0]], { type: 'image/png' });
     const url = URL.createObjectURL(blob);
+    img.src = url
+
+    img.onload = () =>{
+      this.setState({ formValues: { ...this.state.formValues, ratio: img.width/img.height }})
+    }
+
     this.setState({ 
       formValues: { ...this.state.formValues, file: files[0], },
-      url, 
+      url,
     })
   }
 
@@ -63,10 +67,8 @@ class PictureForm extends React.Component {
     });  
   }
 
-
   render() {
     const { toggle, open } = this.props;
-
     return (
       <>
       <FormWrapper>
@@ -85,17 +87,12 @@ class PictureForm extends React.Component {
             >
               {({ getRootProps, getInputProps, isDragActive }) => {
                 return (
-                  <div
+                  <div 
                     {...getRootProps()}
                     style={styles.dropzone}
-                  >
+                    >
                     <input {...getInputProps()} />
-                  <DropBackground url={this.state.url} />
-                    {/* {
-                      isDragActive ?
-                        <p>Drop files here...</p> :
-                        <p>Click Here...</p>
-                    } */}
+                    <DropBackground url={this.state.url} /> 
                   </div>
                 )
               }}
@@ -137,7 +134,6 @@ class PictureForm extends React.Component {
               onChange={this.handleChange}
             />
             </StyledLabel>
-            
           <SubmitButton>submit</SubmitButton>
         </StyledForm>
       </FormWrapper>
@@ -158,16 +154,13 @@ const HeaderDiv = styled.div`
   display: flex;
   justify-content: flex-start;
 `
-
 const StyledLabel = styled.div`
   font-family: 'Montserrat',  sans-serif !important;
 `
-
 const StyledLine = styled.hr`
   background-color: #96969C;
   margin: 0;
 `
-
 const TitleInput = styled.input`
   font-size: 1rem;
   width: 100%;
@@ -204,7 +197,6 @@ const SubmitButton = styled.button`
   width: 100%;
   font: center;
 `
-
 const FormSelect = styled.select`
   font-size: 1rem;
   width: 100%;
@@ -212,7 +204,6 @@ const FormSelect = styled.select`
   padding: 5px;
   margin-bottom: 10px;
 `
-
 const DropBackground = styled.div`
   background-image: url(${props => props.url});
   background-size: cover;
@@ -222,7 +213,6 @@ const DropBackground = styled.div`
   height: 100%;
   cursor: pointer;
 `
-
 const styles = {
   dropzone: {
     height: "150px",
@@ -237,12 +227,10 @@ const styles = {
   },
 }
 
-
 const ConnectedPictureForm = (props) => (
   <AuthConsumer> 
     { auth => <PictureForm { ...props } auth={auth} />}
   </AuthConsumer>
 )
-
 
 export default withRouter(ConnectedPictureForm);

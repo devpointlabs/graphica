@@ -1,17 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import Card from './Card';
 import styled from 'styled-components';
-import { FeedConsumer } from '../../providers/FeedProvider'
+import { FeedConsumer } from '../../providers/FeedProvider';
+import useRenderColumns from '../../hooks/useRenderColumns';
+import FeedColumns from '../feed/FeedColumns';
 
 const Feed = (props) => {
-  const [listItems, setListItems] = useState([]);
-  const [isFetching, setIsFetching] = useState(false);
-  const [noMorePictures, setNoMorePictures] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const { columnArrays, renderColumns } = useRenderColumns();
+  const [ columnCount, setColumnCount ] = useState(3)
+  const [ width, setWidth ] = useState(1000)
+  
+  window.onresize = () => handleResize()
+
+  const handleResize = () => {
+    let newWidth = window.innerWidth
+    if (width < 1000 && newWidth > 999) {
+      setColumnCount(3)
+      renderColumns(props.pictures, 3)
+    } else if (width > 699 && newWidth < 700) {
+      setColumnCount(1)
+      renderColumns(props.pictures, 1)
+    } else if (width > 999 && newWidth < 1000 || width < 700 && newWidth > 699) {
+      setColumnCount(2)
+      renderColumns(props.pictures, 2)
+    }
+    setWidth(window.innerWidth)
+  }
+  
+  const findColumnCount = (width) => {
+    if (width > 999) {
+      setColumnCount(3)
+    } else if (width < 1000 && width > 699) {
+      setColumnCount(2)
+    } else {
+      setColumnCount(1)
+    }
+  }
+
+  useEffect(() => {
+    findColumnCount(window.innerWidth)
+    props.searchPictures()
+  }, [])
   
   useEffect(() => {
-    props.searchPictures();
-  }, [])
-
+    renderColumns(props.pictures, columnCount)
+  }, [props.pictures])
+  
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -19,66 +54,39 @@ const Feed = (props) => {
 
   useEffect(() => {
     if (!isFetching) return;
+    if (props.searching) return;
     getMore();
-  }, [isFetching]);
-  
+  }, [isFetching, props.pictures]);
+
   function handleScroll() {
     if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight - 1000) {
       setIsFetching(true);
-      // console.log(isFetching)
-      
     }
   }
-  
   function getMore() {
-    // console.log("getMOREfired")
-    if(noMorePictures) return;
-    props.searchPictures()
-      .then((pictures) => {
-        if(pictures.length < 11) setNoMorePictures(true);
-        setIsFetching(false);
-      })
-      .catch(console.log)
+    if(props.noMorePictures){
+      setIsFetching(false)
+    } else {
+      props.searchPictures()
+        .then(res => {
+          setIsFetching(false);
+          
+        })
+        .catch(console.log)
+    }
   }
-
-  const renderColumns = () => {
-    const column_arrays = [[], [], []];
-    let iterator = 0;
-
-    props.pictures.forEach((listItem) => {
-      column_arrays[iterator].push(listItem);
-      if(iterator == 2) iterator = 0;
-      else iterator ++;
-    })
-  
-  const updateFeedState = (incomingId) => {
-    props.deletePicture(incomingId)
-  }
-    return (
-      <>
-        <FeedDiv>
-          <ColumnContainer>
-            {column_arrays[0].map(listItem =><><Card key={listItem.id} image={listItem} updateFeedState={updateFeedState}/></>)}
-          </ColumnContainer>
-          <ColumnContainer>
-            {column_arrays[1].map(listItem =><><Card key={listItem.id} image={listItem} updateFeedState={updateFeedState}/></>)}
-          </ColumnContainer>
-          <ColumnContainer>
-            {column_arrays[2].map(listItem =><><Card key={listItem.id} image={listItem} updateFeedState={updateFeedState}/></>)}
-          </ColumnContainer>
-        </FeedDiv>
-        {noMorePictures && <NoContent> [ No {props.pictures.length > 0 && "more"} pictures {props.query.length > 1 && `found for: "${props.query}"`}  ]</NoContent>}
-        {isFetching && !noMorePictures && 'Loading..'}
-      </>
-    )
-  }
-
-  return renderColumns();
+  return (
+    <>
+      <FeedColumns tag={Card} deletePicture={props.deletePicture} columnArrays={columnArrays}/>
+      <NoContent>
+        {isFetching && !props.noMorePictures ? '[ Loading.. ]' : (props.noMorePictures || props.querySearch.length > 0) &&
+          <>[ No {props.pictures.length > 0 && "more"} pictures {props.querySearch.length > 0 && `found for: "${props.querySearch}"`}  ]</>
+        }         
+      </NoContent>
+    </> 
+  )
 };
 
-const SearchResults = styled.div`
-
-`
 const NoContent = styled.div`
   display: flex;  
   width: 100vw;
@@ -89,23 +97,6 @@ const NoContent = styled.div`
   color: grey;
 `
 
-const FeedDiv = styled.div`
-  display: flex;
-  padding-right: 20px;
-  padding-top: 20px;
-  width: 75vw;
-  margin: auto;
-  min-width: 1000px;
-`
-const ColumnContainer = styled.div`
-  margin-top: 25px;
-  margin-left: 25px;
-  width: calc(100% / 3);
-  @media (max-width: 1600px) {};
-  @media (max-width: 1100px) {}
-  @media only screen and (max-width: 800px) {}
-`
-
 const ConnectedFeed = (props) => (
   <FeedConsumer>
     {(value) => <Feed {...props} {...value} />}
@@ -113,4 +104,3 @@ const ConnectedFeed = (props) => (
 );
 
 export default ConnectedFeed;
-

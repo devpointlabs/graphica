@@ -5,7 +5,7 @@ import PictureShow from '../picture/PictureShow';
 import { ImageConsumer } from '../../providers/ImageProvider';
 
 
-class RecentPicture extends React.Component {
+class RecentCard extends React.Component {
   state = { open: false }
 
   toggle = () => this.setState({ open: !this.state.open });
@@ -71,10 +71,10 @@ const ProfileCard = styled.div`
   cursor: zoom-in;
 `;
 
-const ConnectedRecentPicture = (props) => (
+const ConnectedRecentCard = (props) => (
   <ImageConsumer>
-    {(value) => <RecentPicture {...props} {...value} />}
+    {(value) => <RecentCard {...props} {...value} />}
   </ImageConsumer>
 );
 
-export default ConnectedRecentPicture;
+export default ConnectedRecentCard;

@@ -3,43 +3,44 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './components/home/Home';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import NavBar from './components/shared/NavBar2';
+import Navbar from './components/shared/Navbar';
 import Catbar from './components/shared/Catbar';
 import NoMatch from './components/shared/NoMatch';
 import FetchUser from './components/auth/FetchUser';
-import Dash from './components/shared/Dash';
+import Users from './components/users/Users';
 import Profile from './components/profile/Profile';
-import Collection from './components/collection/CollectionShow';
-import PictureCollection from './components/picture/PictureCollection';
-import AboutUs from './components/home/AboutUs'
+import CollectionShow from './components/collection/CollectionShow';
+import AboutUs from './components/home/AboutUs';
+import Collections from './components/collections/Collections'
+
+export const ConfigContext = React.createContext();
 
 const App = () => {
   const [showCatbar, setShowCatbar] = useState(false)
-  const toggleCatbar = (show) => setShowCatbar(show)
+  
+  const configValue = {
+    showCatbar,
+    setShowCatbar, 
+  }
 
-  const LoadHome = (props) => { return <Home {...props} toggleCatbar={toggleCatbar}/>}
-  const LoadProfile = (props) => { return <Profile {...props} toggleCatbar={toggleCatbar}/> }
-  const LoadCollection = (props) => { return <Collection {...props} toggleCatbar={toggleCatbar}/> }
-  const LoadLogin = (props) => { return <Login {...props} toggleCatbar={toggleCatbar}/>}
-  const LoadRegister = (props) => { return <Register {...props} toggleCatbar={toggleCatbar}/>}
-
-  return(
-    <>
-      <NavBar />
-      {(showCatbar) ? <Catbar /> : null}
+  return(                                          
+    <ConfigContext.Provider value={configValue}>
+      <Navbar />
+      <Catbar />
       <FetchUser>
         <Switch>
-          <Route exact path='/' render={LoadHome} />
+          <Route exact path='/' component={Home} />
+          <Route exact path='/collections' component={Collections} />
           <Route exact path='/about_us' component={AboutUs} />
-          <Route exact path='/profile/:id' render={LoadProfile} />
-          <Route exact path='/collections/:id' render={LoadCollection} />
-          <Route exact path='/dash' component={Dash} />
-          <Route exact path='/login' render={LoadLogin} />
-          <Route exact path='/register' render={LoadRegister} />
+          <Route exact path='/profile/:id' component={Profile} />
+          <Route exact path='/collections/:id' component={CollectionShow} />
+          <Route exact path='/users' component={Users} />
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/register' component={Register} />
           <Route component={NoMatch} />
         </Switch>
       </FetchUser>
-    </>
+    </ConfigContext.Provider>
   )
 }
 export default App;

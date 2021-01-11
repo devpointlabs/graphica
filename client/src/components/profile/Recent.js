@@ -1,13 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import axios from "axios";
-import RecentPicture from './RecentPicture';
+import RecentCard from './RecentCard';
 
-class BottomFeed extends React.Component {
+class Recent extends React.Component {
   state = { pictures: [] }
 
   componentDidMount() {
     this.getPictures()
+    window.scrollTo(0, 0);
   }
   
   componentDidUpdate(prevProps) {
@@ -16,6 +17,7 @@ class BottomFeed extends React.Component {
     if(prevId !== currentId) {
       this.getPictures();
     }
+    window.scrollTo(0, 0);
   }
 
   getPictures() {
@@ -29,7 +31,7 @@ class BottomFeed extends React.Component {
   }
 
   renderPictures = () => this.state.pictures.map((pic) => (
-    <RecentPicture picture={pic} key={pic.id} user={this.props.user} deletePicture={this.deletePicture} />
+    <RecentCard picture={pic} key={pic.id} user={this.props.user} deletePicture={this.deletePicture} />
   ))
 
   render() {
@@ -59,7 +61,6 @@ const NoContent = styled.div`
   font-size: 16px;
   color: grey;
 `
-
 const FeedDiv = styled.div`
   width: 75vw;
   min-width: 1000px;
@@ -71,4 +72,4 @@ const FeedDiv = styled.div`
   align-items: center;
 `
 
-export default BottomFeed;
+export default Recent;

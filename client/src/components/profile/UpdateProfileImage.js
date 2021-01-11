@@ -3,7 +3,6 @@ import Dropzone from 'react-dropzone';
 import styled from 'styled-components';
 
 class UpdateProfileImage extends React.Component {
-
   state = { 
     formValues: { file: '' }, url: "" 
   };
@@ -48,6 +47,7 @@ class UpdateProfileImage extends React.Component {
     )
   }
 }
+
 const SubmitButton = styled.button`
   padding: 0.75rem 1.25rem;
   width: 148px;
@@ -61,8 +61,7 @@ const SubmitButton = styled.button`
   display: flex;
   align-self: center;
   cursor: pointer;
-  `
-  
+`
 const DropBackground = styled.div`
   background-image: url(${props => props.url});
   background-size: cover;

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+
   namespace :api do
     namespace :pictures do
       get 'search'
@@ -25,12 +26,13 @@ Rails.application.routes.draw do
     end
 
     resources :users do
+      resources :favorites
       resources :pictures, module: :users
       resources :collections, module: :users
       put "profile_image", to: "users#update_profile_image"
       put "banner_image", to: "users#update_banner_image"
     end
-    #These are for searching globally --- scratch that?   ..I think I'm doing this different now -DL
+    
     resources :collections, only: [:index] do 
       resources :pictures, only: [:index], module: :collections
     end   

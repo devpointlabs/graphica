@@ -117,17 +117,19 @@ class Profile extends React.Component {
   render() {
     const { editing, } = this.state;
     return (
-      <Container>
-        <Divider hidden />
-        <Grid>
-          <Grid.Row>
-            { editing ? this.editView() : this.profileView()}
-            <Grid.Column>
-              <UpdateButton onClick={this.toggleEdit}>{editing ? 'Cancel' : 'Edit'}</UpdateButton>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Container>
+      this.props.auth.authenticated && (
+        <Container>
+          <Divider hidden />
+          <Grid>
+            <Grid.Row>
+              { editing ? this.editView() : this.profileView()}
+              <Grid.Column>
+                <UpdateButton onClick={this.toggleEdit}>{editing ? 'Cancel' : 'Edit'}</UpdateButton>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
+      )
     )
   }
 }

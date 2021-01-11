@@ -9,8 +9,6 @@ import styled from "styled-components";
 class Login extends React.Component {
   state = { email: '', password: '' }
   
-  componentDidMount() { this.props.toggleCatbar(false) }
-
   handleSubmit = (e) => {
     e.preventDefault();
     const { email, password, } = this.state;

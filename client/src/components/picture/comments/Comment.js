@@ -29,7 +29,7 @@ const Comment = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
     
-    axios.patch(`/api/picture_comments/${props.id}`, { body: body, user_id: userId, picture_id: props.pictureId })
+    axios.patch(`/api/picture_comments/${props.id}`, { body: body, user_id: userId, picture_id: props.pictureId }) //can this be a PUT not PATCH?
       .then( res => {
         toggleEdit()
         setBody(res.data.body)
@@ -42,7 +42,7 @@ const Comment = (props) => {
   }
 
   const deleteComment = () => {
-    const result = window.confirm("Delete Comment?")
+    const result = window.confirm("Delete Comment?") //MODALIZE ME PLEASE
     if (result) {
       axios.delete(`api/picture_comments/${props.id}`)
       .then( res => props.deleteCommentState(props.id))
@@ -78,8 +78,7 @@ const Comment = (props) => {
         {editing ?
           <>
             <form onSubmit={handleSubmit}>
-              <input name="comment" type="text" value={body} onChange={handleChange}>
-              </input>
+              <StyledInput name="comment" type="text" value={body} onChange={handleChange} />
             </form>
           </>
         :
@@ -91,6 +90,18 @@ const Comment = (props) => {
     </Wrapper>
   )
 }
+
+const StyledInput = styled.input`
+  border: 1px solid black;
+  height: 35px;
+  width: 70vw; //Not the best fix come back here ##########
+  box-sizing: border-box;
+  outline: none;
+  ::placeholder {
+    font-family: Montserrat;
+  }
+  padding: 1rem;
+`
 const Wrapper = styled.div`
   padding-top: 2rem;
   font-size: 12px;
@@ -100,7 +111,6 @@ const UserDiv = styled.div`
   height: 45px;
   justify-content: space-between;
   font-size: 14px;
-  
 `
 const Left = styled.div`
   display: flex;
@@ -158,7 +168,6 @@ const BodyDiv = styled.div`
   border: solid #F4F4F4;
   padding: 10px;
   font-size: 12px;
-
 `
 
 const ConnectedComment = (props) => (

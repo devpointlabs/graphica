@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Modal from '../modal/Modal';
 import useModal from '../../hooks/useModal';
 import PictureShow from '../picture/PictureShow';
 import commentsImage from '../../img/comments.png'
 import viewsImage from '../../img/views.png'
-import { ImageConsumer } from '../../providers/ImageProvider'
+import { ImageContext } from '../../providers/ImageProvider'
 import { Link } from 'react-router-dom';
+import AddToFavorites from '../picture/AddToFavorites'
+// import starIcon from '../../img/star_outline_24px.svg'
 
 const Card = (props) => {
   const id = props.image.id
@@ -16,22 +18,23 @@ const Card = (props) => {
   const [views, setViews] = useState(props.image.views)
   const [user, setUser] = useState("");
   const [comments, setComments] = useState([]);
-  
+  const context = useContext(ImageContext);
+
   useEffect(() => {
-    props.fetchUser(user_id)
+    context.fetchUser(user_id)
       .then (res => setUser(res.data))
       .catch(console.log)
-    props.fetchComments(id)
+    context.fetchComments(id)
       .then(res => setComments(res.data))
       .catch(console.log)
   }, [])
 
   const updateViewsState = (incomingId) => {
     if (id === incomingId) {setViews(views + 1)}
-    }
+  }
 
   const toggleAndSetId = () => {
-    props.setImageId(id)
+    context.setImageId(id)
     toggle()
   }
 
@@ -45,15 +48,23 @@ const Card = (props) => {
       <Modal onClose={toggle} open={open}>     
         <PictureShow toggle={toggle} updateViewsState={updateViewsState} toggleAndDelete={toggleAndDelete}/>   
       </Modal>       
-      <CardDiv onClick={toggleAndSetId} >
-        <StyledText>{props.image.title}</StyledText>
-        <StyledImage src={url}  />
+      <CardDiv>
+        <StyledText>
+          <Hover>
+            <div onClick={toggleAndSetId}>
+              {props.image.title}
+            </div>
+            <div>
+              <AddToFavorites shadow={false} image={props.image} />
+            </div>
+          </Hover>
+        </StyledText>
+        <StyledImage src={url} onClick={toggleAndSetId}/>
       </CardDiv>
       <PointerOff>
         <CardFooterLeft>
           <Link to={`/profile/${user.id}`} >
             <Flex>
-
               <SmallImage image={user.image}/>
               &nbsp;{user.first_name} {user.last_name}
             </Flex>
@@ -69,6 +80,12 @@ const Card = (props) => {
     </CardBorder>
   )
 }
+
+const Hover = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`
 const Flex = styled.div`
   display: flex;
 `
@@ -77,7 +94,7 @@ const StyledImage = styled.img`
 `
 const StyledText = styled.div`
   position: absolute;
-  z-index: 999;
+  z-index: 1;
   margin: 0 auto;
   left: 0;
   right: 0;
@@ -85,16 +102,12 @@ const StyledText = styled.div`
   text-align: left;
   width: 90%;
   visibility: hidden;
-  
   font-family: Montserrat;
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
   color: white;
-
   text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.35), 0px -2px 4px rgba(255, 255, 255, 0.35);
-
-
 `
 const CardDiv = styled.div`
   cursor: zoom-in;
@@ -109,6 +122,9 @@ const PointerOff = styled.div`
   cursor: default;
   font-family: 'Montserrat';
   font-size: 12px;
+  @media only screen and (max-width: 400px) { 
+     margin: 0.5rem 1rem 0rem 1rem;
+  }
 `
 const CardBorder = styled.div`
   margin-bottom: -40px;
@@ -149,10 +165,4 @@ const CardFooterRight = styled.div`
   color: #96969C;
 `
 
-const ConnectedCard = (props) => (
-  <ImageConsumer>
-    {(value) => <Card {...props} {...value} />}
-  </ImageConsumer>
-);
-
-export default ConnectedCard;
+export default Card;

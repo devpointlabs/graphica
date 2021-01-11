@@ -1,13 +1,12 @@
 import React from 'react';
 import { AuthConsumer } from '../../providers/AuthProvider';
 import { ImageConsumer } from '../../providers/ImageProvider';
-import axios from 'axios';
 import deleteImg from '../../img/delete_24px.svg';
 import styled from 'styled-components';
 const RemoveImage = (props) => {
 
   const removeImage = () => {
-    const result = window.confirm("Remove Image from Collection?")
+    const result = window.confirm("Remove Image from Collection?") //MODALIZE ME PLEASE
     if (result) {
       props.removeImageFromCollection(props.pictureCollection.id)
     }
@@ -15,16 +14,10 @@ const RemoveImage = (props) => {
 
   return (
     <>  
-      { props.authenticated && 
-        <> 
-           {
-              (props.user.id === props.userId) &&
-                <RemoveFromCollection onClick={removeImage}>
-                  <RemoveDiv image={deleteImg} />
-                    
-                </RemoveFromCollection>
-           }
-        </>
+      { props.authenticated && (props.user.id === props.userId) &&
+        <RemoveFromCollection onClick={removeImage}>
+          <RemoveDiv image={deleteImg} /> 
+        </RemoveFromCollection>
       }
     </>
   )
@@ -38,7 +31,6 @@ const RemoveFromCollection = styled.div`
   color: #0099BA;
 `
 const RemoveDiv = styled.div`
-
   background-image: url(${props => props.image});
   background-size: cover;
   background-repeat: no-repeat;
@@ -47,8 +39,6 @@ const RemoveDiv = styled.div`
   height: 20px;
   width: 20px;  
   cursor: pointer;
-
-
 `
 
 const ConnectedRemoveImage = (props) => (

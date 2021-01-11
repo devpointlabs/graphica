@@ -59,7 +59,6 @@ const PictureCollection = (props) => {
 const StyledBlue = styled(Link)`
   color: #0099BA;
 `
-
 const RowDiv = styled.div`
   display: flex;
   align-items: left;
@@ -77,7 +76,6 @@ const PictureContainer = styled.div`
   overflow-x: auto;
   flex-shrink: 0;
 `
-
 const CollectionText = styled.span`
   display: flex;
   align-self: flex-end;

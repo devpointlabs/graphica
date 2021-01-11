@@ -1,4 +1,5 @@
 require Rails.root.join("data", "urls.rb")
+require 'fastimage'
 
 # USERS (7)
   User.create(email: "admin@graphica.com",
@@ -63,11 +64,19 @@ end
 users = User.all
 categories = Category.all
 IMAGE_URLS.map { |url| 
+
+  size = []
+  size = FastImage.size(url)
+  width = size.first
+  height = size.last
+  ratio = (width.to_f/height)
+
   Picture.create(
     category_id: (rand(18)+1), 
     user_id: (rand(4)+2), 
     title: "#{colors[rand(7)]}  #{Faker::Dessert.variety}".titleize,
     url: url,
+    ratio: ratio,
     description: Faker::Lorem.sentence(word_count: 3, supplemental: true),
     views: rand(1...3000)
     )

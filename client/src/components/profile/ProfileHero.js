@@ -1,5 +1,5 @@
 import React from 'react';
-import ContactModal from '../modal/ContactModal';
+import SeeContact from './SeeContact';
 import styled from 'styled-components';
 import { AuthConsumer } from '../../providers/AuthProvider';
 import { Redirect } from 'react-router-dom';
@@ -17,9 +17,9 @@ const ProfileHero = ({ user }) => (
             <UserEmail>
               {user.email}
             </UserEmail>
-            <ContactModal user={user} >
-              Contact Info
-            </ContactModal>
+            <SeeContact user={user} />
+              
+            
           </BannerContents>
         </BannerLeftTop>
         <BioSubText>

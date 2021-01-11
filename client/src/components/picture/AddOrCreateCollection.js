@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import useModal from '../../hooks/useModal';
 import AddToExisting from './AddToExisting';
 import AddToNew from './AddToNew';
 import styled from 'styled-components';
@@ -11,36 +10,31 @@ const AddOrCreateCollection = (props) => {
 
   return (
     <>
-     
-        { toggle 
-          ? 
+      { toggle 
+        ? 
           <> 
             <FormWrapper>
-              <FormHeader> add picture to a collection</FormHeader>
+              <FormHeader> add picture to a collection </FormHeader>
             </FormWrapper>
             <StyledLine></StyledLine>
-            <>
             <AddToExisting toggleModal={props.toggleModal} />
             <StyledLine></StyledLine>
             <ExistingButtonDiv>
-              <SubmitButton onClick={addToNew}>  or create a new collection</SubmitButton>
+              <SubmitButton onClick={addToNew}> or create a new collection </SubmitButton>
             </ExistingButtonDiv>
-            </>
           </>
-          : 
-            <>
+        : 
+          <>
             <AddToNew toggleModal={props.toggleModal}/>
             <StyledLine></StyledLine>
             <ExistingButtonDiv>
-            <SubmitButton onClick={addToExisting}> or choose an existing collection </SubmitButton>
+              <SubmitButton onClick={addToExisting}> or choose an existing collection </SubmitButton>
             </ExistingButtonDiv>
-            </>
-        }
-      
+          </>
+      }
     </>
   )
 }
-
 
 const ExistingButtonDiv = styled.div`
   display: flex;
@@ -59,13 +53,10 @@ const FormWrapper = styled.div`
   flex-direction: column;
   padding: 1.5rem;
 `
-
 const StyledLine = styled.hr`
   background-color: #96969C;
   margin: 0;
 `
-
-
 const SubmitButton = styled.button`
   background: #0099BA;
   box-shadow: 0px 2px 10px rgba(0, 153, 186, 0.5);
@@ -79,7 +70,5 @@ const SubmitButton = styled.button`
   padding: 10px 20px;
   width: 100%;
 `
-
-
 
 export default AddOrCreateCollection

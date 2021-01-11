@@ -47,7 +47,7 @@ class Api::Users::PicturesController < ApplicationController
   private
   
   def picture_params
-    params.require(:picture).permit(:url, :views, :title, :description, :user_id, :category_id)
+    params.require(:picture).permit(:url, :views, :title, :description, :user_id, :category_id, :ratio)
   end
 
   def set_user
@@ -55,6 +55,6 @@ class Api::Users::PicturesController < ApplicationController
   end
 
   def picture_query_params
-    params.permit(:title, :description, :category_id)
+    params.permit(:title, :description, :category_id, :ratio)
   end
 end

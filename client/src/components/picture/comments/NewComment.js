@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { AuthConsumer } from '../../../providers/AuthProvider'
 
-const CommentBar = (props) => {
+const NewComment = (props) => {
   const id = props.id
   const [userId, setUserId] = useState(0)
   const auth = props.auth.authenticated
@@ -36,15 +36,6 @@ const CommentBar = (props) => {
   )
 }
 
-export default class ConnectedCommentBar extends React.Component {
-  render() {
-    return (
-      <AuthConsumer>
-        { auth => <CommentBar {...this.props} auth={auth} />}
-      </AuthConsumer>
-    )
-  }
-}
 const StyledInput = styled.input`
   border: 1px solid black;
   height: 35px;
@@ -56,8 +47,14 @@ const StyledInput = styled.input`
   }
   padding: 1rem;
 `
-
 const StyledForm = styled.form`
   width: 100%;
- 
 `
+
+const ConnectedNewComment = (props) => (
+  <AuthConsumer>
+    { auth => <NewComment {...props} auth={auth} />}
+  </AuthConsumer>
+)
+  
+export default ConnectedNewComment

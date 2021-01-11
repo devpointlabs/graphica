@@ -14,9 +14,7 @@ const Comments = (props) => (
         {props.comments.length !== 1 ? " responses" : " response" }
       </InfoRight>
     </Flex>
-
-    <NewComment id={props.pictureId} setStatePictureShow={props.setStatePictureShow}/>
-
+    <NewComment id={props.pictureId} setStatePictureShow={props.setStatePictureShow} />
     <CommentsDiv>
       {props.comments.map((comment, index) => (
         <>
@@ -40,7 +38,6 @@ const Flex = styled.div`
   width: 100%;
 `
 const InfoRight = styled.div`
-
 `
 const InfoLeft = styled.div`
   font-weight: bold;

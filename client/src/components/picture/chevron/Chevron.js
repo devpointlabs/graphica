@@ -18,8 +18,6 @@ const Chevron = () => {
     imageContext.chevronDirection("descending")
   }
 
-  console.log(highId, imageContext.imageId)
- //redundant 
 
   return (
     // <div style={{display: "flex", justifyContent: "space-between"}}>

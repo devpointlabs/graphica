@@ -15,7 +15,6 @@ const AddCollectionToPicture = (props) => {
   const handleChange = (event) => {
     setCollectionId(event.target.value)
     props.handleCollectionId(collectionId)
-    console.log(collectionId)
   }
 
   return (

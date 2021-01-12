@@ -7,7 +7,6 @@ class FetchUser extends React.Component {
 
   componentDidMount() {
     const { auth: { authenticated, setUser, user }, } = this.props;
-    console.log(user)
     if (authenticated) {
       this.loaded();
     } else {

@@ -17,13 +17,13 @@ const Feed = (props) => {
     let newWidth = window.innerWidth
     if (width < 1000 && newWidth > 999) {
       setColumnCount(3)
-      renderColumns(props.pictures, 3)
+      // renderColumns(props.pictures, 3)
     } else if (width > 699 && newWidth < 700) {
       setColumnCount(1)
-      renderColumns(props.pictures, 1)
+      // renderColumns(props.pictures, 1)
     } else if (width > 999 && newWidth < 1000 || width < 700 && newWidth > 699) {
       setColumnCount(2)
-      renderColumns(props.pictures, 2)
+      // renderColumns(props.pictures, 2)
     }
     setWidth(window.innerWidth)
   }
@@ -45,7 +45,7 @@ const Feed = (props) => {
   
   useEffect(() => {
     renderColumns(props.pictures, columnCount)
-  }, [props.pictures])
+  }, [props.pictures, columnCount])
   
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
